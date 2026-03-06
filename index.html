@@ -82,7 +82,315 @@ background:conic-gradient(
 #4d79ff 306deg 360deg
 );
 }
+<!DOCTYPE html><html>
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>সামি ভাইয়ের পক্ষ থেকে ঈদের সালামি</title><style>
 
+body{
+font-family:sans-serif;
+background:linear-gradient(135deg,#ff7e5f,#feb47b);
+text-align:center;
+padding:20px;
+margin:0;
+}
+
+.container{
+background:white;
+max-width:420px;
+margin:auto;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+.moon{
+font-size:40px;
+animation:floatMoon 4s ease-in-out infinite;
+}
+
+@keyframes floatMoon{
+0%{transform:translateY(0)}
+50%{transform:translateY(-10px)}
+100%{transform:translateY(0)}
+}
+
+.salami{
+font-size:26px;
+color:#2a9d8f;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+input,select{
+width:92%;
+padding:12px;
+margin:10px;
+border-radius:10px;
+border:1px solid #ccc;
+}
+
+button{
+background:#2a9d8f;
+color:white;
+border:none;
+padding:14px 25px;
+font-size:18px;
+border-radius:10px;
+cursor:pointer;
+margin:5px;
+}
+
+.pointer{
+width:0;
+height:0;
+border-left:15px solid transparent;
+border-right:15px solid transparent;
+border-bottom:30px solid red;
+margin:auto;
+}
+
+#wheel{
+width:280px;
+height:280px;
+border-radius:50%;
+margin:20px auto;
+transition:transform 6s ease-out;
+
+background:conic-gradient(
+#ff4d4d 0deg 51deg,
+#ffd84d 51deg 102deg,
+#66ff66 102deg 153deg,
+#4dd2ff 153deg 204deg,
+#b84dff 204deg 255deg,
+#ff66cc 255deg 306deg,
+#4d79ff 306deg 360deg
+);
+}
+
+#walletPage{
+display:none;
+}
+
+/* Eid popup */
+
+#eidPopup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:linear-gradient(135deg,#ff7e5f,#feb47b);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.popupBox{
+background:white;
+padding:40px;
+border-radius:20px;
+text-align:center;
+max-width:360px;
+}
+
+/* Custom alert */
+
+.customAlert{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.alertBox{
+background:white;
+padding:25px;
+border-radius:15px;
+max-width:320px;
+}
+
+.alertBtn{
+background:#2a9d8f;
+color:white;
+padding:10px 20px;
+border:none;
+border-radius:8px;
+margin-top:15px;
+}
+
+</style></head><body><!-- Eid popup --><div id="eidPopup">
+<div class="popupBox">
+<h2>🕌 আসসালামু আলাইকুম</h2>
+<h1>🌙 ঈদ মোবারক 🌙</h1>
+<p>🎉 আপনাদের সবাইকে সামি ভাইয়ের পক্ষ হতে ঈদের শুভেচ্ছা</p>
+</div>
+</div><!-- Custom alert --><div id="customAlert" class="customAlert" style="display:none;">
+<div class="alertBox"><p id="alertText"></p><button class="alertBtn" onclick="closeAlert()">OK</button>
+
+</div>
+</div><div class="container" id="spinPage"><div class="moon">🌙</div><h2 class="salami">
+🧧🌙 সামি ভাইয়ের পক্ষ থেকে ঈদের সালামি 🎁✨
+</h2><input id="name" placeholder="আপনার নাম">
+<input id="number" placeholder="বিকাশ / নগদ নাম্বার"><div class="pointer"></div>
+<div id="wheel"></div><button onclick="spin()">🎡 স্পিন করুন</button>
+
+<h3 id="balance">Wallet: 0৳</h3>
+<button onclick="openWallet()">👛 Wallet</button></div><div class="container" id="walletPage"><h2>👛 Wallet</h2>
+<h3 id="walletBalance">Balance: 0৳</h3><select id="method">
+<option>Bkash</option>
+<option>Nagad</option>
+<option>Rocket</option>
+<option>Recharge</option>
+</select><button onclick="withdraw()">Withdraw</button>
+
+<br><br>
+<button onclick="back()">⬅ Back</button>
+
+</div><audio id="spinSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+<audio id="clapSound" src="https://assets.mixkit.co/active_storage/sfx/221/221-preview.mp3"></audio>
+
+<script>
+
+/* Popup close */
+
+setTimeout(function(){
+document.getElementById("eidPopup").style.display="none";
+},12000);
+
+/* Custom alert */
+
+function showAlert(text){
+document.getElementById("alertText").innerHTML=text;
+document.getElementById("customAlert").style.display="flex";
+}
+
+function closeAlert(){
+document.getElementById("customAlert").style.display="none";
+}
+
+let prizes=[50,80,100,150,200,300,400];
+let rotation=0;
+let wallet=0;
+let withdrawCount=0;
+
+function spin(){
+
+let spinAudio=document.getElementById("spinSound");
+
+let name=document.getElementById("name").value;
+let number=document.getElementById("number").value;
+
+if(name=="" || number==""){
+showAlert("😉 আপনি নাম ও নাম্বার না দিয়েই স্পিন করতে এসেছেন?<br><br>কত চালাক দেখছি!<br><br>চালাকি করলে কিন্তু সালামি মিস করবেন!<br><br>আগে নাম ও নাম্বার দিন তারপর স্পিন করুন।");
+return;
+}
+
+spinAudio.currentTime=0;
+spinAudio.play();
+
+setTimeout(function(){
+spinAudio.pause();
+spinAudio.currentTime=0;
+},4000);
+
+let rand=Math.random()*100;
+let index;
+
+if(rand<40){index=0;}
+else if(rand<65){index=1;}
+else if(rand<80){index=2;}
+else if(rand<90){index=3;}
+else if(rand<95){index=4;}
+else if(rand<98){index=5;}
+else{index=6;}
+
+let winAmount=prizes[index];
+wallet+=winAmount;
+
+let slice=360/prizes.length;
+let stopAngle=(360-(index*slice)-(slice/2));
+
+rotation+=360*5+stopAngle;
+
+document.getElementById("wheel").style.transform="rotate("+rotation+"deg)";
+
+setTimeout(function(){
+
+let clap=document.getElementById("clapSound");
+clap.currentTime=0;
+clap.play();
+
+setTimeout(function(){
+
+showAlert("🎉 অভিনন্দন! আপনি সামি ভাইয়ের কাছ থেকে ঈদের "+winAmount+"৳ সালামি পেয়েছেন।");
+
+document.getElementById("balance").innerHTML="Wallet: "+wallet+"৳";
+
+},400);
+
+},6000);
+
+}
+
+function openWallet(){
+
+document.getElementById("spinPage").style.display="none";
+document.getElementById("walletPage").style.display="block";
+
+document.getElementById("walletBalance").innerHTML="Balance: "+wallet+"৳";
+
+}
+
+function back(){
+
+document.getElementById("walletPage").style.display="none";
+document.getElementById("spinPage").style.display="block";
+
+}
+
+function withdraw(){
+
+if(withdrawCount>=3){
+showAlert("আপনি ইতিমধ্যে ৩ বার উত্তোলনের জন্য রিকোয়েস্ট করেছেন");
+return;
+}
+
+let name=document.getElementById("name").value;
+let number=document.getElementById("number").value;
+let method=document.getElementById("method").value;
+
+let message=
+"🧧 Withdraw Request\n\n"+
+"👤 Name: "+name+"\n"+
+"📱 Number: "+number+"\n"+
+"💳 Method: "+method+"\n"+
+"💰 Amount: "+wallet+"৳";
+
+let token="8661084474:AAGHrVkPP2J-ghzJaCGSepvgiGN-INh0NLc";
+let chat_id="7044949311";
+
+fetch("https://api.telegram.org/bot"+token+"/sendMessage?chat_id="+chat_id+"&text="+encodeURIComponent(message));
+
+withdrawCount++;
+
+showAlert("সামি ভাইয়ের থেকে পাওয়া সালামিটি আপনার দেওয়া নাম্বারে ২ ঘন্টার মধ্যে চলে যাবে।");
+
+wallet=0;
+
+document.getElementById("walletBalance").innerHTML="Balance: 0৳";
+document.getElementById("balance").innerHTML="Wallet: 0৳";
+
+}
+
+</script></body>
+</html>
 #walletPage{
 display:none;
 }
