@@ -1,13 +1,20 @@
-l<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
 <head>
+
 <meta charset="UTF-8">
-<title>সামি ভাইয়ের পক্ষ থেকে ঈদের সালামি</title><style>
- 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>সামি ভাইয়ের পক্ষ থেকে ঈদের সালামি</title>
+
+<style>
+
 body{
 font-family:sans-serif;
 background:linear-gradient(135deg,#ff7e5f,#feb47b);
 text-align:center;
 padding:20px;
+margin:0;
 }
 
 .container{
@@ -38,7 +45,7 @@ margin-bottom:10px;
 }
 
 input,select{
-width:90%;
+width:92%;
 padding:12px;
 margin:10px;
 border-radius:10px;
@@ -66,8 +73,8 @@ margin:auto;
 }
 
 #wheel{
-width:260px;
-height:260px;
+width:280px;
+height:280px;
 border-radius:50%;
 margin:20px auto;
 transition:transform 6s ease-out;
@@ -113,84 +120,92 @@ font-size:42px;
 color:#e63946;
 }
 
-</style></head><body><!-- POPUP --><div id="eidPopup">
+</style>
+</head>
+
+<body>
+
+<div id="eidPopup">
 <div class="popupBox">
 <h2>🕌 আসসালামু আলাইকুম</h2>
 <h1>🌙 ঈদ মোবারক 🌙</h1>
 <p>🎉 আপনাদের সবাইকে সামি ভাইয়ের পক্ষ হতে ঈদের শুভেচ্ছা</p>
 </div>
-</div><div class="container" id="spinPage"><div class="moon">🌙</div><h2 class="salami">
+</div>
+
+<div class="container" id="spinPage">
+
+<div class="moon">🌙</div>
+
+<h2 class="salami">
 🧧🌙 সামি ভাইয়ের পক্ষ থেকে ঈদের সালামি 🎁✨
-</h2><input id="name" placeholder="আপনার নাম">
-<input id="number" placeholder="বিকাশ / নগদ নাম্বার"><div class="pointer"></div>
-<div id="wheel"></div><button onclick="spin()">🎡 স্পিন করুন</button>
+</h2>
+
+<input id="name" placeholder="আপনার নাম">
+<input id="number" placeholder="বিকাশ / নগদ নাম্বার">
+
+<div class="pointer"></div>
+<div id="wheel"></div>
+
+<button onclick="spin()">🎡 স্পিন করুন</button>
 
 <h3 id="balance">Wallet: 0৳</h3>
-<button onclick="openWallet()">👛 Wallet</button></div><div class="container" id="walletPage"><h2>👛 Wallet</h2>
-<h3 id="walletBalance">Balance: 0৳</h3><select id="method">
+<button onclick="openWallet()">👛 Wallet</button>
+
+</div>
+
+<div class="container" id="walletPage">
+
+<h2>👛 Wallet</h2>
+<h3 id="walletBalance">Balance: 0৳</h3>
+
+<select id="method">
 <option>Bkash</option>
 <option>Nagad</option>
 <option>Rocket</option>
 <option>Recharge</option>
-</select><button onclick="withdraw()">Withdraw</button>
+</select>
+
+<button onclick="withdraw()">Withdraw</button>
 
 <br><br>
 <button onclick="back()">⬅ Back</button>
 
-</div><!-- SOUNDS --><audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+</div>
 
+<audio id="spinSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 <audio id="clapSound" src="https://assets.mixkit.co/active_storage/sfx/221/221-preview.mp3"></audio>
 
 <script>
-
-/* POPUP CLOSE */
 
 setTimeout(function(){
 document.getElementById("eidPopup").style.display="none";
 },12000);
 
-
 let prizes=[50,80,100,150,200,300,400];
 let rotation=0;
 let wallet=0;
-
-let clickInterval;
 let withdrawCount=0;
 
 function spin(){
 
-let click=document.getElementById("clickSound");
-
-/* FAST CLICK */
-
-clickInterval=setInterval(function(){
-click.currentTime=0;
-click.play();
-},90);
-
-
-/* SLOW AFTER 3s */
-
-setTimeout(function(){
-
-clearInterval(clickInterval);
-
-clickInterval=setInterval(function(){
-click.currentTime=0;
-click.play();
-},220);
-
-},3000);
-
+let spinAudio=document.getElementById("spinSound");
 
 let name=document.getElementById("name").value;
 let number=document.getElementById("number").value;
 
 if(name=="" || number==""){
 alert("নাম এবং নাম্বার দিন");
-clearInterval(clickInterval);
 return;
 }
+
+spinAudio.currentTime=0;
+spinAudio.play();
+
+setTimeout(function(){
+spinAudio.pause();
+spinAudio.currentTime=0;
+},4000);
 
 let rand=Math.random()*100;
 let index;
@@ -213,12 +228,7 @@ rotation+=360*5+stopAngle;
 
 document.getElementById("wheel").style.transform="rotate("+rotation+"deg)";
 
-
 setTimeout(function(){
-
-clearInterval(clickInterval);
-
-/* CLAP */
 
 let clap=document.getElementById("clapSound");
 clap.currentTime=0;
@@ -236,7 +246,6 @@ document.getElementById("balance").innerHTML="Wallet: "+wallet+"৳";
 
 }
 
-
 function openWallet(){
 
 document.getElementById("spinPage").style.display="none";
@@ -252,7 +261,6 @@ document.getElementById("walletPage").style.display="none";
 document.getElementById("spinPage").style.display="block";
 
 }
-
 
 function withdraw(){
 
@@ -288,5 +296,7 @@ document.getElementById("balance").innerHTML="Wallet: 0৳";
 
 }
 
-</script></body>
+</script>
+
+</body>
 </html>
