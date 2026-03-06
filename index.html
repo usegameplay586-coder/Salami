@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>সামি ভাইয়ের পক্ষ থেকে ঈদের সালামি</title>
-
-<style>
+<!DOCTYPE html><html>
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>সামি ভাইয়ের পক্ষ থেকে ঈদের সালামি</title><style>
 
 body{
 font-family:sans-serif;
@@ -120,60 +113,31 @@ font-size:42px;
 color:#e63946;
 }
 
-</style>
-</head>
-
-<body>
-
-<div id="eidPopup">
+</style></head><body><div id="eidPopup">
 <div class="popupBox">
 <h2>🕌 আসসালামু আলাইকুম</h2>
 <h1>🌙 ঈদ মোবারক 🌙</h1>
 <p>🎉 আপনাদের সবাইকে সামি ভাইয়ের পক্ষ হতে ঈদের শুভেচ্ছা</p>
 </div>
-</div>
-
-<div class="container" id="spinPage">
-
-<div class="moon">🌙</div>
-
-<h2 class="salami">
+</div><div class="container" id="spinPage"><div class="moon">🌙</div><h2 class="salami">
 🧧🌙 সামি ভাইয়ের পক্ষ থেকে ঈদের সালামি 🎁✨
-</h2>
-
-<input id="name" placeholder="আপনার নাম">
-<input id="number" placeholder="বিকাশ / নগদ নাম্বার">
-
-<div class="pointer"></div>
-<div id="wheel"></div>
-
-<button onclick="spin()">🎡 স্পিন করুন</button>
+</h2><input id="name" placeholder="আপনার নাম">
+<input id="number" placeholder="বিকাশ / নগদ নাম্বার"><div class="pointer"></div>
+<div id="wheel"></div><button onclick="spin()">🎡 স্পিন করুন</button>
 
 <h3 id="balance">Wallet: 0৳</h3>
-<button onclick="openWallet()">👛 Wallet</button>
-
-</div>
-
-<div class="container" id="walletPage">
-
-<h2>👛 Wallet</h2>
-<h3 id="walletBalance">Balance: 0৳</h3>
-
-<select id="method">
+<button onclick="openWallet()">👛 Wallet</button></div><div class="container" id="walletPage"><h2>👛 Wallet</h2>
+<h3 id="walletBalance">Balance: 0৳</h3><select id="method">
 <option>Bkash</option>
 <option>Nagad</option>
 <option>Rocket</option>
 <option>Recharge</option>
-</select>
-
-<button onclick="withdraw()">Withdraw</button>
+</select><button onclick="withdraw()">Withdraw</button>
 
 <br><br>
 <button onclick="back()">⬅ Back</button>
 
-</div>
-
-<audio id="spinSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+</div><audio id="spinSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 <audio id="clapSound" src="https://assets.mixkit.co/active_storage/sfx/221/221-preview.mp3"></audio>
 
 <script>
@@ -195,7 +159,7 @@ let name=document.getElementById("name").value;
 let number=document.getElementById("number").value;
 
 if(name=="" || number==""){
-alert("নাম এবং নাম্বার দিন");
+alert("😏 আপনি নাম ও নাম্বার না দিয়েই স্পিন করতে এসেছেন?\n\nকত চালাক দেখছি!\n\nচালাকি করলে কিন্তু সালামি মিস করবেন!\n\nআগে নাম ও নাম্বার দিন তারপর স্পিন করুন।");
 return;
 }
 
@@ -296,7 +260,5 @@ document.getElementById("balance").innerHTML="Wallet: 0৳";
 
 }
 
-</script>
-
-</body>
+</script></body>
 </html>
