@@ -43,6 +43,7 @@ padding:12px;
 margin:10px;
 border-radius:10px;
 border:1px solid #ccc;
+font-size:16px;
 }
 
 button{
@@ -151,8 +152,14 @@ margin-top:15px;
 </div>
 </div><div class="container" id="spinPage"><div class="moon">🌙</div><h2 class="salami">
 🧧🌙 সামি ভাইয়ের পক্ষ থেকে ঈদের সালামি 🎁✨
-</h2><input id="name" placeholder="আপনার নাম">
-<input id="number" placeholder="বিকাশ / নগদ নাম্বার"><div class="pointer"></div>
+</h2><input id="name" placeholder="আপনার নাম"><input id="number"
+placeholder="বিকাশ / নগদ নাম্বার"
+type="tel"
+maxlength="11"
+pattern="[0-9]*"
+oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+
+<div class="pointer"></div>
 <div id="wheel"></div><button onclick="spin()">🎡 স্পিন করুন</button>
 
 <h3 id="balance">Wallet: 0৳</h3>
@@ -193,26 +200,27 @@ let rotation=0;
 let wallet=0;
 let withdrawCount=0;
 
-function spin(){
+function validNumber(number){
+let pattern=/^01[0-9]{9}$/;
+return pattern.test(number);
+}
 
-let spinAudio=document.getElementById("spinSound");
+function spin(){
 
 let name=document.getElementById("name").value;
 let number=document.getElementById("number").value;
 
-/* name empty */
-
 if(name==""){
-showAlert("নাম লিখুন তারপর স্পিন করুন।");
+showAlert("নাম লিখে তারপর স্পিন করুন।");
 return;
 }
 
-/* number validation */
-
-if(number.length !== 11){
+if(!validNumber(number)){
 showAlert("সামি ভাইয়ের থেকে সালামি নিতে হলে সঠিক নাম্বার লিখে তারপর স্পিন করুন!");
 return;
 }
+
+let spinAudio=document.getElementById("spinSound");
 
 spinAudio.currentTime=0;
 spinAudio.play();
@@ -245,9 +253,7 @@ document.getElementById("wheel").style.transform="rotate("+rotation+"deg)";
 
 setTimeout(function(){
 
-let clap=document.getElementById("clapSound");
-clap.currentTime=0;
-clap.play();
+document.getElementById("clapSound").play();
 
 setTimeout(function(){
 
@@ -284,12 +290,12 @@ let number=document.getElementById("number").value;
 let method=document.getElementById("method").value;
 let amountType=document.getElementById("amountType").value;
 
-if(number.length !== 11){
-showAlert("⚠️ বিকাশ / নগদ নাম্বার অবশ্যই ১১ সংখ্যার হতে হবে।");
+if(!validNumber(number)){
+showAlert("⚠️ সঠিক ১১ সংখ্যার নাম্বার দিন।");
 return;
 }
 
-if(wallet < 10){
+if(wallet<10){
 showAlert("⚠️ Minimum Withdraw Amount ১০৳");
 return;
 }
@@ -301,13 +307,13 @@ return;
 
 let withdrawAmount;
 
-if(amountType === "10"){
-withdrawAmount = 10;
-wallet -= 10;
+if(amountType==="10"){
+withdrawAmount=10;
+wallet-=10;
 }
 else{
-withdrawAmount = wallet;
-wallet = 0;
+withdrawAmount=wallet;
+wallet=0;
 }
 
 let message=
