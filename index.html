@@ -108,8 +108,6 @@ text-align:center;
 max-width:360px;
 }
 
-/* custom alert */
-
 .customAlert{
 position:fixed;
 top:0;
@@ -202,8 +200,17 @@ let spinAudio=document.getElementById("spinSound");
 let name=document.getElementById("name").value;
 let number=document.getElementById("number").value;
 
-if(name=="" || number==""){
-showAlert("😏 আপনি নাম ও নাম্বার না দিয়েই স্পিন করতে এসেছেন?<br><br>কত চালাক দেখছি!<br><br>চালাকি করলে কিন্তু সালামি মিস করবেন!<br><br>আগে নাম ও নাম্বার দিন তারপর স্পিন করুন।");
+/* name empty */
+
+if(name==""){
+showAlert("নাম লিখুন তারপর স্পিন করুন।");
+return;
+}
+
+/* number validation */
+
+if(number.length !== 11){
+showAlert("সামি ভাইয়ের থেকে সালামি নিতে হলে সঠিক নাম্বার লিখে তারপর স্পিন করুন!");
 return;
 }
 
