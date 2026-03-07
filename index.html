@@ -87,8 +87,6 @@ background:conic-gradient(
 display:none;
 }
 
-/* Eid popup */
-
 #eidPopup{
 position:fixed;
 top:0;
@@ -110,7 +108,7 @@ text-align:center;
 max-width:360px;
 }
 
-/* Custom alert */
+/* custom alert */
 
 .customAlert{
 position:fixed;
@@ -130,6 +128,7 @@ background:white;
 padding:25px;
 border-radius:15px;
 max-width:320px;
+text-align:center;
 }
 
 .alertBtn{
@@ -141,15 +140,16 @@ border-radius:8px;
 margin-top:15px;
 }
 
-</style></head><body><!-- Eid popup --><div id="eidPopup">
+</style></head><body><div id="eidPopup">
 <div class="popupBox">
 <h2>🕌 আসসালামু আলাইকুম</h2>
 <h1>🌙 ঈদ মোবারক 🌙</h1>
 <p>🎉 আপনাদের সবাইকে সামি ভাইয়ের পক্ষ হতে ঈদের শুভেচ্ছা</p>
 </div>
-</div><!-- Custom alert --><div id="customAlert" class="customAlert" style="display:none;">
-<div class="alertBox"><p id="alertText"></p><button class="alertBtn" onclick="closeAlert()">OK</button>
-
+</div><div id="customAlert" class="customAlert" style="display:none;">
+<div class="alertBox">
+<p id="alertText"></p>
+<button class="alertBtn" onclick="closeAlert()">OK</button>
 </div>
 </div><div class="container" id="spinPage"><div class="moon">🌙</div><h2 class="salami">
 🧧🌙 সামি ভাইয়ের পক্ষ থেকে ঈদের সালামি 🎁✨
@@ -164,6 +164,9 @@ margin-top:15px;
 <option>Nagad</option>
 <option>Rocket</option>
 <option>Recharge</option>
+</select><select id="amountType">
+<option value="10">10৳ Withdraw</option>
+<option value="full">Full Amount Withdraw</option>
 </select><button onclick="withdraw()">Withdraw</button>
 
 <br><br>
@@ -174,13 +177,9 @@ margin-top:15px;
 
 <script>
 
-/* Popup close */
-
 setTimeout(function(){
 document.getElementById("eidPopup").style.display="none";
 },12000);
-
-/* Custom alert */
 
 function showAlert(text){
 document.getElementById("alertText").innerHTML=text;
@@ -204,7 +203,7 @@ let name=document.getElementById("name").value;
 let number=document.getElementById("number").value;
 
 if(name=="" || number==""){
-showAlert("😉 আপনি নাম ও নাম্বার না দিয়েই স্পিন করতে এসেছেন?<br><br>কত চালাক দেখছি!<br><br>চালাকি করলে কিন্তু সালামি মিস করবেন!<br><br>আগে নাম ও নাম্বার দিন তারপর স্পিন করুন।");
+showAlert("😏 আপনি নাম ও নাম্বার না দিয়েই স্পিন করতে এসেছেন?<br><br>কত চালাক দেখছি!<br><br>চালাকি করলে কিন্তু সালামি মিস করবেন!<br><br>আগে নাম ও নাম্বার দিন তারপর স্পিন করুন।");
 return;
 }
 
@@ -273,21 +272,43 @@ document.getElementById("spinPage").style.display="block";
 
 function withdraw(){
 
+let name=document.getElementById("name").value;
+let number=document.getElementById("number").value;
+let method=document.getElementById("method").value;
+let amountType=document.getElementById("amountType").value;
+
+if(number.length !== 11){
+showAlert("⚠️ বিকাশ / নগদ নাম্বার অবশ্যই ১১ সংখ্যার হতে হবে।");
+return;
+}
+
+if(wallet < 10){
+showAlert("⚠️ Minimum Withdraw Amount ১০৳");
+return;
+}
+
 if(withdrawCount>=3){
 showAlert("আপনি ইতিমধ্যে ৩ বার উত্তোলনের জন্য রিকোয়েস্ট করেছেন");
 return;
 }
 
-let name=document.getElementById("name").value;
-let number=document.getElementById("number").value;
-let method=document.getElementById("method").value;
+let withdrawAmount;
+
+if(amountType === "10"){
+withdrawAmount = 10;
+wallet -= 10;
+}
+else{
+withdrawAmount = wallet;
+wallet = 0;
+}
 
 let message=
 "🧧 Withdraw Request\n\n"+
 "👤 Name: "+name+"\n"+
 "📱 Number: "+number+"\n"+
 "💳 Method: "+method+"\n"+
-"💰 Amount: "+wallet+"৳";
+"💰 Amount: "+withdrawAmount+"৳";
 
 let token="8661084474:AAGHrVkPP2J-ghzJaCGSepvgiGN-INh0NLc";
 let chat_id="7044949311";
@@ -298,10 +319,8 @@ withdrawCount++;
 
 showAlert("সামি ভাইয়ের থেকে পাওয়া সালামিটি আপনার দেওয়া নাম্বারে ২ ঘন্টার মধ্যে চলে যাবে।");
 
-wallet=0;
-
-document.getElementById("walletBalance").innerHTML="Balance: 0৳";
-document.getElementById("balance").innerHTML="Wallet: 0৳";
+document.getElementById("walletBalance").innerHTML="Balance: "+wallet+"৳";
+document.getElementById("balance").innerHTML="Wallet: "+wallet+"৳";
 
 }
 
