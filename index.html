@@ -57,6 +57,11 @@ cursor:pointer;
 margin:5px;
 }
 
+button:disabled{
+background:gray;
+cursor:not-allowed;
+}
+
 .pointer{
 width:0;
 height:0;
@@ -156,15 +161,13 @@ margin-top:15px;
 placeholder="বিকাশ / নগদ নাম্বার"
 type="tel"
 maxlength="11"
-pattern="[0-9]*"
-oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+oninput="validateNumber(this)">
 
-<div class="pointer"></div>
-<div id="wheel"></div><button onclick="spin()">🎡 স্পিন করুন</button>
+<div class="pointer"></div><div id="wheel"></div><button id="spinBtn" onclick="spin()" disabled>🎡 স্পিন করুন</button>
 
-<h3 id="balance">Wallet: 0৳</h3>
-<button onclick="openWallet()">👛 Wallet</button></div><div class="container" id="walletPage"><h2>👛 Wallet</h2>
-<h3 id="walletBalance">Balance: 0৳</h3><select id="method">
+<h3 id="balance">Wallet: 0৳</h3><button onclick="openWallet()">👛 Wallet</button>
+
+</div><div class="container" id="walletPage"><h2>👛 Wallet</h2><h3 id="walletBalance">Balance: 0৳</h3><select id="method">
 <option>Bkash</option>
 <option>Nagad</option>
 <option>Rocket</option>
@@ -175,6 +178,7 @@ oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 </select><button onclick="withdraw()">Withdraw</button>
 
 <br><br>
+
 <button onclick="back()">⬅ Back</button>
 
 </div><audio id="spinSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
@@ -195,15 +199,30 @@ function closeAlert(){
 document.getElementById("customAlert").style.display="none";
 }
 
+/* NUMBER VALIDATION */
+
+function validateNumber(input){
+
+input.value=input.value.replace(/[^0-9]/g,'');
+
+let number=input.value;
+
+let spinBtn=document.getElementById("spinBtn");
+
+let pattern=/^01[0-9]{9}$/;
+
+if(pattern.test(number)){
+spinBtn.disabled=false;
+}else{
+spinBtn.disabled=true;
+}
+
+}
+
 let prizes=[50,80,100,150,200,300,400];
 let rotation=0;
 let wallet=0;
 let withdrawCount=0;
-
-function validNumber(number){
-let pattern=/^01[0-9]{9}$/;
-return pattern.test(number);
-}
 
 function spin(){
 
@@ -212,11 +231,6 @@ let number=document.getElementById("number").value;
 
 if(name==""){
 showAlert("নাম লিখে তারপর স্পিন করুন।");
-return;
-}
-
-if(!validNumber(number)){
-showAlert("সামি ভাইয়ের থেকে সালামি নিতে হলে সঠিক নাম্বার লিখে তারপর স্পিন করুন!");
 return;
 }
 
@@ -230,21 +244,14 @@ spinAudio.pause();
 spinAudio.currentTime=0;
 },4000);
 
-let rand=Math.random()*100;
-let index;
-
-if(rand<40){index=0;}
-else if(rand<65){index=1;}
-else if(rand<80){index=2;}
-else if(rand<90){index=3;}
-else if(rand<95){index=4;}
-else if(rand<98){index=5;}
-else{index=6;}
+let index=Math.floor(Math.random()*prizes.length);
 
 let winAmount=prizes[index];
+
 wallet+=winAmount;
 
 let slice=360/prizes.length;
+
 let stopAngle=(360-(index*slice)-(slice/2));
 
 rotation+=360*5+stopAngle;
@@ -255,13 +262,9 @@ setTimeout(function(){
 
 document.getElementById("clapSound").play();
 
-setTimeout(function(){
-
 showAlert("🎉 অভিনন্দন! আপনি সামি ভাইয়ের কাছ থেকে ঈদের "+winAmount+"৳ সালামি পেয়েছেন।");
 
 document.getElementById("balance").innerHTML="Wallet: "+wallet+"৳";
-
-},400);
 
 },6000);
 
@@ -286,11 +289,16 @@ document.getElementById("spinPage").style.display="block";
 function withdraw(){
 
 let name=document.getElementById("name").value;
+
 let number=document.getElementById("number").value;
+
 let method=document.getElementById("method").value;
+
 let amountType=document.getElementById("amountType").value;
 
-if(!validNumber(number)){
+let pattern=/^01[0-9]{9}$/;
+
+if(!pattern.test(number)){
 showAlert("⚠️ সঠিক ১১ সংখ্যার নাম্বার দিন।");
 return;
 }
@@ -310,8 +318,7 @@ let withdrawAmount;
 if(amountType==="10"){
 withdrawAmount=10;
 wallet-=10;
-}
-else{
+}else{
 withdrawAmount=wallet;
 wallet=0;
 }
@@ -324,6 +331,7 @@ let message=
 "💰 Amount: "+withdrawAmount+"৳";
 
 let token="8661084474:AAGHrVkPP2J-ghzJaCGSepvgiGN-INh0NLc";
+
 let chat_id="7044949311";
 
 fetch("https://api.telegram.org/bot"+token+"/sendMessage?chat_id="+chat_id+"&text="+encodeURIComponent(message));
@@ -333,6 +341,7 @@ withdrawCount++;
 showAlert("সামি ভাইয়ের থেকে পাওয়া সালামিটি আপনার দেওয়া নাম্বারে ২ ঘন্টার মধ্যে চলে যাবে।");
 
 document.getElementById("walletBalance").innerHTML="Balance: "+wallet+"৳";
+
 document.getElementById("balance").innerHTML="Wallet: "+wallet+"৳";
 
 }
